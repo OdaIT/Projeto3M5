@@ -1,8 +1,27 @@
 const pool = require("../db");
 
-const getAllTasks = async () => {
-  const [rows] = await pool.query("SELECT * FROM tasks");
+const getAllTasks = async (sort, search) => {
+  let query = "SELECT * FROM tasks";
+  const params = [];
+
+  if (search) {
+    query += " WHERE title LIKE ?";
+    params.push(`%${search}%`);
+  }
+
+  if (sort === "asc" || sort === "desc") {
+    query += ` ORDER BY title ${sort.toUpperCase()}`;
+  }
+
+  const [rows] = await pool.query(query, params);
   return rows;
+};
+
+const getTaskStats = async () => {
+  const [[{ total }]] = await pool.query("SELECT COUNT(*) AS total FROM tasks");
+  const [[{ done }]] = await pool.query("SELECT COUNT(*) AS done FROM tasks WHERE done = 1");
+  const [[{ pending }]] = await pool.query("SELECT COUNT(*) AS pending FROM tasks WHERE done = 0");
+  return { total, done, pending };
 };
 
 const getTaskById = async (id) => {
@@ -12,20 +31,28 @@ const getTaskById = async (id) => {
 };
 
 const postTask = async (body) => {
-  const [result] = await pool.query("INSERT INTO tasks (title, done) VALUES (?, ?)", [body.title, false]);
-  return { id: result.insertId, title: body.title, done: false };
+  if (!body.title || typeof body.title !== "string" || body.title.trim() === "") {
+    throw new Error("Task title required or invalid");
+  }
+  const [result] = await pool.query("INSERT INTO tasks (title, done) VALUES (?, ?)", [body.title.trim(), false]);
+  return { id: result.insertId, title: body.title.trim(), done: false };
 };
 
 const putTask = async (taskIdParam, body) => {
+  if (!body.title || typeof body.title !== "string" || body.title.trim() === "") {
+    throw new Error("Task title required or invalid");
+  }
   const task = await getTaskById(taskIdParam);
-  await pool.query("UPDATE tasks SET title = ? WHERE id = ?", [body.title, taskIdParam]);
-  return { ...task, title: body.title };
+  await pool.query("UPDATE tasks SET title = ? WHERE id = ?", [body.title.trim(), taskIdParam]);
+  return { ...task, title: body.title.trim() };
 };
 
 const deleteTask = async (taskIdParam) => {
-  const [result] = await pool.query("DELETE FROM tasks WHERE id = ?", [taskIdParam]);
-  if (result.affectedRows === 0) throw new Error("Task not found");
-  return { message: "Task deleted successfully" };
+  const task = await getTaskById(taskIdParam);
+  await pool.query("DELETE FROM task_tags WHERE taskId = ?", [taskIdParam]);
+  await pool.query("DELETE FROM comments WHERE taskId = ?", [taskIdParam]);
+  await pool.query("DELETE FROM tasks WHERE id = ?", [taskIdParam]);
+  return task;
 };
 
 const patchDone = async (taskIdParam, done) => {
@@ -75,6 +102,7 @@ const getAllTaskTags = async () => {
 module.exports = {
   getAllTasks,
   getTaskById,
+  getTaskStats,
   postTask,
   putTask,
   deleteTask,

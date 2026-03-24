@@ -1,8 +1,33 @@
 const pool = require("../db");
 
-const getAllUsers = async () => {
-  const [rows] = await pool.query("SELECT * FROM users");
+const getAllUsers = async (sort, search) => {
+  let query = "SELECT * FROM users";
+  const params = [];
+
+  if (search) {
+    query += " WHERE name LIKE ?";
+    params.push(`%${search}%`);
+  }
+
+  if (sort === "asc" || sort === "desc") {
+    query += ` ORDER BY name ${sort.toUpperCase()}`;
+  }
+
+  const [rows] = await pool.query(query, params);
   return rows;
+};
+
+const getUserStats = async () => {
+  const [[{ total }]] = await pool.query("SELECT COUNT(*) AS total FROM users");
+  const [[{ active }]] = await pool.query("SELECT COUNT(*) AS active FROM users WHERE status = 1");
+  const [[{ inactive }]] = await pool.query("SELECT COUNT(*) AS inactive FROM users WHERE status = 0");
+  return { total, active, inactive };
+};
+
+const patchUserStatus = async (userId, status) => {
+  const user = await getUserById(userId);
+  await pool.query("UPDATE users SET status = ? WHERE id = ?", [status, userId]);
+  return { ...user, status };
 };
 
 const getUserById = async (userId) => {
@@ -20,15 +45,22 @@ const postUser = async (body) => {
 };
 
 const putUser = async (userId, body) => {
+  if (!body.name || typeof body.name !== "string" || body.name.trim() === "") {
+    throw new Error("User name required or invalid");
+  }
+  if (!body.email || typeof body.email !== "string" || body.email.trim() === "") {
+    throw new Error("User email required or invalid");
+  }
   const user = await getUserById(userId);
-  await pool.query("UPDATE users SET name = ?, email = ? WHERE id = ?", [body.name, body.email, userId]);
-  return { ...user, name: body.name, email: body.email };
+  await pool.query("UPDATE users SET name = ?, email = ? WHERE id = ?", [body.name.trim(), body.email.trim(), userId]);
+  return { ...user, name: body.name.trim(), email: body.email.trim() };
 };
 
 const deleteUser = async (userId) => {
   const user = await getUserById(userId);
+  await pool.query("DELETE FROM comments WHERE userId = ?", [userId]);
   await pool.query("DELETE FROM users WHERE id = ?", [userId]);
   return user;
 };
 
-module.exports = { getAllUsers, getUserById, postUser, putUser, deleteUser };
+module.exports = { getAllUsers, getUserById, getUserStats, postUser, putUser, patchUserStatus, deleteUser };

@@ -6,6 +6,11 @@ const getAllTaskTags = async () => {
 };
 
 const postTaskTag = async (body) => {
+  const [existing] = await pool.query(
+    "SELECT * FROM task_tags WHERE taskId = ? AND tagId = ?",
+    [body.taskId, body.tagId]
+  );
+  if (existing.length > 0) throw new Error("TaskTag already exists");
   const [result] = await pool.query(
     "INSERT INTO task_tags (taskId, tagId) VALUES (?, ?)",
     [body.taskId, body.tagId]

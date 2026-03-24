@@ -3,8 +3,13 @@ const tagService = require("../services/tagService");
 const taskTagService = require("../services/taskTagService");
 
 const getTasks = async (req, res) => {
-  const tasks = await taskService.getAllTasks();
+  const tasks = await taskService.getAllTasks(req.query.sort, req.query.search);
   res.json(tasks);
+};
+
+const getTaskStats = async (req, res) => {
+  const stats = await taskService.getTaskStats();
+  res.json(stats);
 };
 
 const postTask = async (req, res) => {
@@ -104,4 +109,4 @@ const putTaskTag = async (req, res) => {
   }
 };
 
-module.exports = { getTasks, postTask, putTask, deleteTask, addTagToTask, getTagsByTask, patchTaskDone, putTaskTag };
+module.exports = { getTasks, getTaskStats, postTask, putTask, deleteTask, addTagToTask, getTagsByTask, patchTaskDone, putTaskTag };

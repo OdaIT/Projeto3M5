@@ -1,8 +1,22 @@
 const userService = require("../services/userService");
 
 const getUsers = async (req, res) => {
-  const users = await userService.getAllUsers();
+  const users = await userService.getAllUsers(req.query.sort, req.query.search);
   res.json(users);
+};
+
+const getUserStats = async (req, res) => {
+  const stats = await userService.getUserStats();
+  res.json(stats);
+};
+
+const patchUser = async (req, res) => {
+  try {
+    const user = await userService.patchUserStatus(req.params.id, req.body.status);
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
+  }
 };
 
 const getUserbyId = async (req, res) => {
@@ -37,4 +51,4 @@ const deleteUser = async (req, res) => {
   }
 };
 
-module.exports = { getUsers, postUser, putUser, deleteUser, getUserbyId };
+module.exports = { getUsers, getUserStats, getUserbyId, postUser, putUser, patchUser, deleteUser };
