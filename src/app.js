@@ -1,12 +1,15 @@
+const path = require("path");
 const express = require("express");
 const app = express();
 
 app.use(express.json());
 
 //funciona como uma especie de pagina 'mãe/index', caso o user não adicione nada depois de http://localhost:3000
-app.get("/", (req, res) => {
-  res.redirect("/users");
-});
+/*app.get("/", (req, res) => {
+  res.send("Hello Word");
+});*/
+
+app.use(express.static(path.join(__dirname, "public")))
 
 const taskRoutes = require("./routes/tasks");
 app.use("/tasks", taskRoutes);
