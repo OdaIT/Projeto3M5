@@ -1,4 +1,4 @@
-USE projeto2;
+USE projeto3;
 
 -- Users
 INSERT INTO users (name, email, status) VALUES
@@ -50,21 +50,3 @@ INSERT INTO task_tags (taskId, tagId) VALUES
 (9, 2),  -- Pagination -> feature
 (9, 4),  -- Pagination -> backend
 (10, 7); -- README -> documentation
-
--- Comments
-INSERT INTO comments (taskId, userId, content, createdAt, lastAlteredAt) VALUES
-(1, 1, 'Reproduced on iOS 17. The crash happens right after submitting the form.', '2026-03-01 09:00:00', '2026-03-01 09:00:00'),
-(1, 2, 'Looks like a null pointer in the session handler. I will take a look.', '2026-03-01 10:30:00', '2026-03-01 10:30:00'),
-(1, 4, 'Fix pushed to branch fix/login-mobile. Ready for review.', '2026-03-02 14:00:00', '2026-03-02 14:00:00'),
-(2, 3, 'We should follow the system preference by default and allow manual override.', '2026-03-03 11:00:00', '2026-03-03 11:00:00'),
-(2, 5, 'Agreed. I can handle the CSS variables part.', '2026-03-03 11:45:00', '2026-03-03 11:45:00'),
-(3, 1, 'Documentation is complete. All endpoints covered with examples.', '2026-03-05 16:00:00', '2026-03-05 16:00:00'),
-(4, 4, 'Found several N+1 query issues in the reports module.', '2026-03-06 09:15:00', '2026-03-06 09:15:00'),
-(4, 2, 'We should add indexes on userId and createdAt in the comments table.', '2026-03-06 10:00:00', '2026-03-06 10:00:00'),
-(5, 5, 'Flow is working. Email delivery tested with Mailtrap.', '2026-03-07 13:00:00', '2026-03-07 13:00:00'),
-(6, 2, 'Started writing tests for the JWT validation logic.', '2026-03-08 08:30:00', '2026-03-08 08:30:00'),
-(6, 1, 'Don not forget edge cases for expired tokens.', '2026-03-08 09:00:00', '2026-03-08 09:00:00'),
-(8, 3, 'Upload fails silently when file exceeds 2MB. No error shown to the user.', '2026-03-10 14:30:00', '2026-03-10 14:30:00'),
-(8, 4, 'Will add proper validation and user-facing error messages.', '2026-03-10 15:00:00', '2026-03-10 15:00:00'),
-(9, 5, 'Should we use cursor-based or offset pagination?', '2026-03-11 10:00:00', '2026-03-11 10:00:00'),
-(9, 1, 'Cursor-based is better for large datasets. Let us go with that.', '2026-03-11 10:30:00', '2026-03-11 10:30:00');

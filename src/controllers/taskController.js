@@ -128,9 +128,9 @@ const putTaskTag = async (req, res) => {
 const removeTagFromTask = async (req, res) => {
   try {
     await taskService.removeTagFromTask(parseInt(req.params.id), parseInt(req.params.tagId));
-    res.status(200).json({ message: "Tag removed from task" });
+    res.status(200).json({ message: `Tag ${req.params.tagId} removed from task ${req.params.id}` });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Error removing tag from task" });
   }
 };
 

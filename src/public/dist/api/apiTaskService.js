@@ -54,7 +54,7 @@ export async function postTask(title) {
         body: JSON.stringify({ title }),
     });
     if (!res.ok) {
-        throw new Error("Erro ao postar task");
+        throw new Error("Erro ao postar uma task");
     }
     return await res.json();
 }
@@ -68,8 +68,9 @@ export async function addTagToTask(taskId, tagId) {
         body: JSON.stringify({ tagId }),
     });
     if (!res.ok) {
-        throw new Error("Erro ao adicionar tag à task");
+        throw new Error("Erro ao adicionar uma tag à task");
     }
+    return await res.json();
 }
 // PUT /tasks/:id/tags/:taskTagId
 export async function updateTaskTag(taskId, taskTagId, body) {
@@ -81,8 +82,9 @@ export async function updateTaskTag(taskId, taskTagId, body) {
         body: JSON.stringify(body),
     });
     if (!res.ok) {
-        throw new Error("Erro ao atualizar task tag");
+        throw new Error("Erro ao alterar uma task tag");
     }
+    return await res.json();
 }
 // PATCH /tasks/:id/done
 export async function patchTaskDone(id, done) {
@@ -94,7 +96,7 @@ export async function patchTaskDone(id, done) {
         body: JSON.stringify({ done }),
     });
     if (!res.ok) {
-        throw new Error("Erro ao alterar done da task");
+        throw new Error("Erro ao modificar uma done da task");
     }
     return await res.json();
 }
@@ -104,7 +106,7 @@ export async function deleteTask(id) {
         method: "DELETE",
     });
     if (!res.ok) {
-        throw new Error("Erro ao apagar task");
+        throw new Error("Erro ao apagar uma task");
     }
     return await res.json();
 }

@@ -68,7 +68,7 @@ const putUser = async (userId, body) => {
 
 const deleteUser = async (userId) => {
   const user = await getUserById(userId);
-  await pool.query("DELETE FROM comments WHERE userId = ?", [userId]);
+  //await pool.query("DELETE FROM comments WHERE userId = ?", [userId]);
   await pool.query("DELETE FROM users WHERE id = ?", [userId]);
   return user;
 };

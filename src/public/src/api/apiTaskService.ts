@@ -2,6 +2,7 @@ import { Task } from "../models/task";
 //import { User } from "../models/user";
 import { Tag } from "../models/tag";
 import { Stats } from "../models/stats";
+import { TaskTag } from "../models/taskTag";
 
 const BASE_URL = "http://localhost:3000";
 
@@ -76,7 +77,7 @@ export async function postTask(title: string): Promise<Task> {
   });
 
   if (!res.ok) {
-    throw new Error("Erro ao postar task");
+    throw new Error("Erro ao postar uma task");
   }
 
   return await res.json();
@@ -93,12 +94,14 @@ export async function addTagToTask(taskId: number, tagId: number): Promise<void>
   });
 
   if (!res.ok) {
-    throw new Error("Erro ao adicionar tag à task");
+    throw new Error("Erro ao adicionar uma tag à task");
   }
+  
+  return await res.json();
 }
 
 // PUT /tasks/:id/tags/:taskTagId
-export async function updateTaskTag(taskId: number, taskTagId: number, body: { taskId: number, tagId: number }): Promise<void> {
+export async function updateTaskTag(taskId: number, taskTagId: number, body: { taskId: number, tagId: number }): Promise<TaskTag> {
   const res = await fetch(`${BASE_URL}/tasks/${taskId}/tags/${taskTagId}`, {
     method: "PUT",
     headers: {
@@ -108,8 +111,10 @@ export async function updateTaskTag(taskId: number, taskTagId: number, body: { t
   });
 
   if (!res.ok) {
-    throw new Error("Erro ao atualizar task tag");
+    throw new Error("Erro ao alterar uma task tag");
   }
+  
+  return await res.json();
 }
 
 // PATCH /tasks/:id/done
@@ -123,7 +128,7 @@ export async function patchTaskDone(id: number, done: boolean): Promise<Task> {
   });
 
   if (!res.ok) {
-    throw new Error("Erro ao alterar done da task");
+    throw new Error("Erro ao modificar uma done da task");
   }
 
   return await res.json();
@@ -136,7 +141,7 @@ export async function deleteTask(id: number): Promise<Task> {
   });
 
   if (!res.ok) {
-    throw new Error("Erro ao apagar task");
+    throw new Error("Erro ao apagar uma task");
   }
 
   return await res.json();
