@@ -53,6 +53,7 @@ const putTask = async (taskIdParam, body) => {
 const deleteTask = async (taskIdParam) => {
   const task = await getTaskById(taskIdParam);
   await pool.query("DELETE FROM task_tags WHERE taskId = ?", [taskIdParam]);
+  await pool.query("DELETE FROM user_task WHERE taskId = ?", [taskIdParam]);
   //await pool.query("DELETE FROM comments WHERE taskId = ?", [taskIdParam]);
   await pool.query("DELETE FROM tasks WHERE id = ?", [taskIdParam]);
   return task;

@@ -1,4 +1,5 @@
 const userService = require("../services/userService");
+const taskService = require("../services/taskService");
 
 const getUsers = async (req, res) => {
   try {
@@ -63,6 +64,44 @@ const deleteUser = async (req, res) => {
   }
 };
 
-module.exports = { getUsers, getUserStats, getUserbyId, postUser, putUser, patchUser, deleteUser };
+const postTaskToUser = async (req, res) => {
+  const userId = parseInt(req.params.id);
+  const { taskId } = req.body;
+
+  try { await userService.getUserById(userId); }
+  catch { return res.status(404).json({ message: "User not found" }); }
+
+  try { await taskService.getTaskById(taskId); }
+  catch { return res.status(404).json({ message: "Task not found" }); }
+
+  try {
+    const association = await userService.postTaskToUser(userId, taskId);
+    if (!association) return res.status(409).json({ message: "Association already exists" });
+    res.status(201).json(association);
+  } catch (err) {
+    res.status(500).json({ message: "Error assigning task to user" });
+  }
+};
+
+
+const getTasksByUser = async (req, res) => {
+  try {
+    const tasks = await userService.getTasksByUser(parseInt(req.params.id));
+    res.json(tasks);
+  } catch (err) {
+    res.status(500).json({ message: `Error getting tasks for user ${req.params.id}` });
+  }
+};
+
+const deleteTaskFromUser = async (req, res) => {
+  try {
+    await userService.deleteTaskFromUser(parseInt(req.params.id), parseInt(req.params.taskId));
+    res.status(200).json({ message: `Task ${req.params.taskId} removed from user ${req.params.id}` });
+  } catch (err) {
+    res.status(500).json({ message: "Error removing task from user" });
+  }
+};
+
+module.exports = { getUsers, getUserStats, getUserbyId, postUser, putUser, patchUser, deleteUser, postTaskToUser, getTasksByUser, deleteTaskFromUser};
 
 //redone

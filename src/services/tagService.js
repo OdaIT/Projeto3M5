@@ -13,7 +13,7 @@ const getTagById = async (tagId) => {
 };
 
 const postTag = async (body) => {
-  const [result] = await pool.query("INSERT INTO tags (name) VALUES (?)", [body.name.trim()]);
+  const [result] = await pool.query("INSERT INTO tags (name) VALUES (?)", [body.name.trim().toLowerCase()]);
   return { id: result.insertId, name: body.name.trim() };
 };
 

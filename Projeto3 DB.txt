@@ -26,3 +26,14 @@ CREATE TABLE task_tags (
     FOREIGN KEY (taskId) REFERENCES tasks(id),
     FOREIGN KEY (tagId) REFERENCES tags(id)
 );
+
+--um user por task (UNIQUE)
+
+CREATE TABLE user_task (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    userId INT NOT NULL,
+    taskId INT NOT NULL,
+    FOREIGN KEY (taskId) REFERENCES tasks(id),
+    FOREIGN KEY (userId) REFERENCES users(id),
+    UNIQUE (taskId)
+);

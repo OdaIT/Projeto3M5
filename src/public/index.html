@@ -1,14 +1,101 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Minha página</title>
+  <meta charset="UTF-8">
+  <title>User Task Manager</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Olá mundo </h1>
-  <p>Minha primeira página</p>
+  <h1>User Task Manager</h1>
 
-  <div id="resultado"></div>
-  
+  <div class="stats">
+    <div class="stat-box neutral" id="total-users">Total Users: 0</div>
+    <div class="stat-box red" id="inactive-users">Inactive: 0</div>
+    <div class="stat-box green" id="active-users">Active: 0</div>
+    <div class="stat-box neutral" id="total-tasks">Total Tasks: 0</div>
+    <div class="stat-box yellow" id="pending-tasks">Pending Tasks: 0</div>
+    <div class="stat-box green" id="done-tasks">Tasks Done: 0</div>
+  </div>
+
+  <div class="tables-container">
+    <div class="table-section">
+      <form id="create-user-form">
+        <input id="user-name" type="text" placeholder="Name" required>
+        <input id="user-email" type="email" placeholder="Email" required>
+        <button type="submit">Create User</button>
+      </form>
+      <div class="table-controls">
+        <label>Sort:
+          <select id="user-sort">
+            <option value="asc">Name (A-Z)</option>
+            <option value="desc">Name (Z-A)</option>
+          </select>
+        </label>
+        <label>Show:
+          <select id="user-show">
+            <option value="all">All users</option>
+            <option value="active">Active only</option>
+            <option value="inactive">Inactive only</option>
+          </select>
+        </label>
+        <label class="search-label">🔍<input id="user-search-email" type="text" placeholder="Search name or email"></label>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="users-tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="table-section">
+      <form id="create-item-form">
+        <select id="item-type">
+          <option value="task">Task</option>
+          <option value="tag">Tag</option>
+        </select>
+        <input id="item-name" type="text" placeholder="Name" required>
+        <button type="submit">Create</button>
+      </form>
+      <div class="table-controls">
+        <label>Sort:
+          <select id="task-sort">
+            <option value="asc">Title (A-Z)</option>
+            <option value="desc">Title (Z-A)</option>
+          </select>
+        </label>
+        <label>Show:
+          <select id="task-show">
+            <option value="all">All tasks</option>
+            <option value="pending">Pending</option>
+            <option value="done">Done</option>
+          </select>
+        </label>
+        <label class="search-label">🔍<input id="task-search-title" type="text" placeholder="Search title or tag"></label>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Tags</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tasks-tbody"></tbody>
+      </table>
+      <div class="all-tags-section">
+        <span class="all-tags-label">Tags:</span>
+        <div id="all-tags-container"></div>
+      </div>
+    </div>
+  </div>
+
   <script type="module" src="./dist/main.js"></script>
 </body>
 </html>

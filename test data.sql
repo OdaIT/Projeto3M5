@@ -50,3 +50,22 @@ INSERT INTO task_tags (taskId, tagId) VALUES
 (9, 2),  -- Pagination -> feature
 (9, 4),  -- Pagination -> backend
 (10, 7); -- README -> documentation
+
+-- User Tasks
+
+INSERT INTO user_task (userId, taskId) VALUES
+(1, 1),  -- Alice -> Fix login page crash on mobile
+(2, 2),  -- Bruno -> Add dark mode support
+(5, 3),  -- Eva -> Write API documentation
+(2, 4),  -- Bruno -> Optimize database queries
+(4, 5),  -- Diego -> Implement password reset flow
+(1, 6),  -- Alice -> Create unit tests for auth module
+(3, 7),  -- Carla -> Deploy staging environment
+(4, 8),  -- Diego -> Fix broken image uploads
+(2, 9),  -- Bruno -> Add pagination to user list
+(5, 10); -- Eva -> Update README with setup instructions
+
+
+
+USE projeto3;
+select * from users WHERE id= 5;

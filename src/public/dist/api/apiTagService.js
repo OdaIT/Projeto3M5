@@ -1,59 +1,101 @@
 const BASE_URL = "http://localhost:3000";
 // GET /tags        //promisse tag[] recebe um array de tags, ou seja, todas as tags
 export async function getAllTags() {
-    const res = await fetch(`${BASE_URL}/tags`);
-    if (!res.ok) {
-        throw new Error("Erro ao buscar tags");
+    try {
+        const res = await fetch(`${BASE_URL}/tags`);
+        if (!res.ok) {
+            throw new Error("Erro ao buscar tags");
+        }
+        const data = await res.json();
+        return data;
     }
-    return await res.json();
+    catch (err) {
+        console.error(err);
+        throw err;
+    }
 }
 // GET /tags/:id        devolve um objeto
 export async function getTagById(id) {
-    const res = await fetch(`${BASE_URL}/tags/${id}`);
-    if (!res.ok) {
-        throw new Error("Erro ao buscar as tag por id");
+    try {
+        const res = await fetch(`${BASE_URL}/tags/${id}`);
+        if (!res.ok) {
+            throw new Error("Erro ao buscar as tag por id");
+        }
+        const data = await res.json();
+        return data;
     }
-    return await res.json();
+    catch (err) {
+        console.error(err);
+        throw err;
+    }
 }
 // GET /tags/:id/tasks
 export async function getTasksByTagId(id) {
-    const res = await fetch(`${BASE_URL}/tags/${id}/tasks`);
-    if (!res.ok) {
-        throw new Error("Erro ao buscar a task da tag por id");
+    try {
+        const res = await fetch(`${BASE_URL}/tags/${id}/tasks`);
+        if (!res.ok) {
+            throw new Error("Erro ao buscar a task da tag por id");
+        }
+        const data = await res.json();
+        return data;
     }
-    return await res.json();
+    catch (err) {
+        console.error(err);
+        throw err;
+    }
 }
 // POST /tags
 export async function postTag(name) {
-    const res = await fetch(`${BASE_URL}/tags`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name }),
-    });
-    if (!res.ok) {
-        throw new Error("Erro ao criar tag");
+    try {
+        const res = await fetch(`${BASE_URL}/tags`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name }),
+        });
+        if (!res.ok) {
+            throw new Error("Erro ao criar tag");
+        }
+        const data = await res.json();
+        return data;
     }
-    return await res.json();
+    catch (err) {
+        console.error(err);
+        throw err;
+    }
 }
 // DELETE /tags/:id
 export async function deleteTag(id) {
-    const res = await fetch(`${BASE_URL}/tags/${id}`, {
-        method: "DELETE",
-    });
-    if (!res.ok) {
-        throw new Error("Erro ao apagar tag");
+    try {
+        const res = await fetch(`${BASE_URL}/tags/${id}`, {
+            method: "DELETE",
+        });
+        if (!res.ok) {
+            throw new Error("Erro ao apagar tag");
+        }
+        const data = await res.json();
+        return data;
     }
-    return await res.json();
+    catch (err) {
+        console.error(err);
+        throw err;
+    }
 }
 // DELETE /tasks/:id/tags/:tagId  // devolve a string do taskController -> removeTagFromTask
 export async function deleteTaskTag(taskId, tagId) {
-    const res = await fetch(`${BASE_URL}/tasks/${taskId}/tags/${tagId}`, {
-        method: "DELETE",
-    });
-    if (!res.ok) {
-        throw new Error("Erro ao remover tag da task");
+    try {
+        const res = await fetch(`${BASE_URL}/tasks/${taskId}/tags/${tagId}`, {
+            method: "DELETE",
+        });
+        if (!res.ok) {
+            throw new Error("Erro ao remover tag da task");
+        }
+        const data = await res.json();
+        return data;
     }
-    return await res.json();
+    catch (err) {
+        console.error(err);
+        throw err;
+    }
 }

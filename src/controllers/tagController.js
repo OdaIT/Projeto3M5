@@ -2,8 +2,12 @@ const tagService = require("../services/tagService");
 const taskService = require("../services/taskService");
 
 const getTags = async (req, res) => {
-  const tags = await tagService.getAllTags();
-  res.json(tags);
+  try {
+    const tags = await tagService.getAllTags();
+    res.json(tags);
+  } catch (error) {
+    res.status(500).json({ message: "Error getting tags" });
+  }
 };
 
 const postTag = async (req, res) => {
@@ -38,13 +42,17 @@ const getTasksByTag = async (req, res) => {
   try {
     await tagService.getTagById(tagId);
   } catch {
-    return res.status(404).json({ message: "Tag getting tasks by tag" });
+    return res.status(404).json({ message: "Tag not found" });
   }
 
-  let tasks = await taskService.getTasksByTagId(tagId);
-
-  res.json(tasks);
+  try {
+    const tasks = await taskService.getTasksByTagId(tagId);
+    res.json(tasks);
+  } catch {
+    res.status(500).json({ message: "Error getting tasks by tag" });
+  }
 };
+
 
 
 module.exports = { getTags, postTag, deleteTag, getTasksByTag, getTagById };

@@ -8,6 +8,8 @@ const checkTagName = async (req, res, next) => {
     const exists = rows.find((row) => row.name.toLowerCase() === name.toLowerCase());
     if(exists){
       res.status(400).json({ message: "Tag already exists" });
+    }else if(req.body.name.length > 20){
+      res.status(400).json({ message: "Name too long, max 20 chars" });
     }else{
       next();
     }

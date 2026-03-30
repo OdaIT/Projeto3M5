@@ -1,100 +1,189 @@
 import { User } from "../models/user";
+import { Task } from "../models/task";
 
 const BASE_URL = "http://localhost:3000";
 
 // GET /users
 export async function getAllUsers(): Promise<User[]> {
-  const res = await fetch(`${BASE_URL}/users`);
+  try {
+    const res = await fetch(`${BASE_URL}/users`);
 
-  if (!res.ok) {
-    throw new Error("Erro ao buscar users");
+    if (!res.ok) {
+      throw new Error("Erro ao buscar users");
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    throw err;
   }
-
-  return await res.json();
 }
 
 // GET /users/stats
 export async function getUserStats(): Promise<any> {
-  const res = await fetch(`${BASE_URL}/users/stats`);
+  try {
+    const res = await fetch(`${BASE_URL}/users/stats`);
 
-  if (!res.ok) {
-    throw new Error("Erro ao buscar stats dos users");
+    if (!res.ok) {
+      throw new Error("Erro ao buscar stats dos users");
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    throw err;
   }
-
-  return await res.json();
 }
 
 // GET /users/:id
 export async function getUserById(id: number): Promise<User> {
-  const res = await fetch(`${BASE_URL}/users/${id}`);
+  try {
+    const res = await fetch(`${BASE_URL}/users/${id}`);
 
-  if (!res.ok) {
-    throw new Error("Erro ao buscar user por id");
+    if (!res.ok) {
+      throw new Error("Erro ao buscar user por id");
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    throw err;
   }
-
-  return await res.json();
 }
 
 // POST /users
 export async function postUser(name: string, email: string): Promise<User> {
-  const res = await fetch(`${BASE_URL}/users`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ name, email }),
-  });
+  try {
+    const res = await fetch(`${BASE_URL}/users`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, email }),
+    });
+        //Erro 409 Conflict, para quando o email ja está em uso.
+    if (res.status === 409) {
+      throw new Error("Email já em utilização");
+    }
+    if (!res.ok) {
+      throw new Error("Erro ao criar user");
+    }
 
-  if (!res.ok) {
-    throw new Error("Erro ao criar user");
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    throw err;
   }
-
-  return await res.json();
 }
 
 // PUT /users/:id
 export async function putUser(id: number, user: User): Promise<User> {
-  const res = await fetch(`${BASE_URL}/users/${id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(user),
-  });
+  try {
+    const res = await fetch(`${BASE_URL}/users/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    });
 
-  if (!res.ok) {
-    throw new Error("Erro ao atualizar user");
+    if (!res.ok) {
+      throw new Error("Erro ao atualizar user");
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    throw err;
   }
-
-  return await res.json();
 }
 
 // PATCH /users/:id
 export async function patchUserStatus(id: number, status: boolean): Promise<User> {
-  const res = await fetch(`${BASE_URL}/users/${id}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ status }),
-  });
+  try {
+    const res = await fetch(`${BASE_URL}/users/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status }),
+    });
 
-  if (!res.ok) {
-    throw new Error("Erro ao modificar status do user");
+    if (!res.ok) {
+      throw new Error("Erro ao modificar status do user");
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    throw err;
   }
-
-  return await res.json();
 }
 
 // DELETE /users/:id
 export async function deleteUser(id: number): Promise<User> {
-  const res = await fetch(`${BASE_URL}/users/${id}`, {
-    method: "DELETE",
-  });
+  try {
+    const res = await fetch(`${BASE_URL}/users/${id}`, {
+      method: "DELETE",
+    });
 
-  if (!res.ok) {
-    throw new Error("Erro ao apagar user");
+    if (!res.ok) {
+      throw new Error("Erro ao apagar user");
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    throw err;
   }
+}
 
-  return await res.json();
+// POST /users/:id/tasks
+export async function assignTaskToUser(userId: number, taskId: number): Promise<{ id: number, userId: number, taskId: number }> {
+  try {
+    const res = await fetch(`${BASE_URL}/users/${userId}/tasks`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ taskId }),
+    });
+    if (!res.ok) throw new Error("Erro ao associar task ao user");
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
+
+// GET /users/:id/tasks
+export async function getTasksByUser(userId: number): Promise<Task[]> {
+  try {
+    const res = await fetch(`${BASE_URL}/users/${userId}/tasks`);
+    if (!res.ok) throw new Error("Erro ao buscar tasks do user");
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
+}
+
+// DELETE /users/:id/tasks/:taskId
+export async function removeTaskFromUser(userId: number, taskId: number): Promise<{ message: string }> {
+  try {
+    const res = await fetch(`${BASE_URL}/users/${userId}/tasks/${taskId}`, { method: "DELETE" });
+    if (!res.ok) throw new Error("Erro ao apagar task do user");
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    throw err;
+  }
 }

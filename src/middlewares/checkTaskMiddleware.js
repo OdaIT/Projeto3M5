@@ -6,7 +6,7 @@ const checkTaskId = async (req, res, next) => {
         const id = parseInt(req.params.id);
         const exists = rows.find((row)=> row.id === id);
         if(!exists){
-            res.status(409).json({ message: "Id doesnt exist" })
+            res.status(404).json({ message: "Id doesnt exist" })
         }else{
             next();
         }
@@ -18,7 +18,7 @@ const checkTaskId = async (req, res, next) => {
 const checkTaskTitle = (req, res, next) => {
     try {
         const title = req.body.title;
-        if (title.length < 3 || title == "" || typeof(title) !== "string"){
+        if (typeof title !== "string" || title === "" || title.length < 3) {
             res.status(406).json({ message: "Invalid title" });    
         }else{
             next(); 
@@ -31,7 +31,7 @@ const checkTaskTitle = (req, res, next) => {
 const checkCommentContent = (req, res, next) => {
     try {
         const content = req.body.content;
-        if (content.length <= 3 || content === "" || typeof(content) !== "string"){
+        if (typeof content !== "string" || content === "" || content.length < 3) {
             res.status(406).json({ message: "Invalid content" });    
         }else{
             next();
