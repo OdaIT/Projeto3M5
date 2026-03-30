@@ -173,8 +173,8 @@ div2.innerHTML = showtasks.map(task => `
 const showtags = await getAllTags();
 
 const div3 = document.getElementById("tags")!;
-div3.innerHTML = showtags.map(user => `
-  <p><strong>ID:</strong> ${user.id} |
-     <strong>Name:</strong> ${user.name}
+div3.innerHTML = showtags.map(tag => `
+  <p><strong>ID:</strong> ${tag.id} |
+     <strong>Name:</strong> ${tag.name}
   </p>
 `).join("");
