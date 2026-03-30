@@ -1,5 +1,6 @@
 import { User } from "../models/user";
 import { Task } from "../models/task";
+import { UserTask } from "../models/userTask";
 
 const BASE_URL = "http://localhost:3000";
 
@@ -146,7 +147,7 @@ export async function deleteUser(id: number): Promise<User> {
 }
 
 // POST /users/:id/tasks
-export async function assignTaskToUser(userId: number, taskId: number): Promise<{ id: number, userId: number, taskId: number }> {
+export async function assignTaskToUser(userId: number, taskId: number): Promise<UserTask> {
   try {
     const res = await fetch(`${BASE_URL}/users/${userId}/tasks`, {
       method: "POST",
