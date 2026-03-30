@@ -135,7 +135,6 @@ function renderTasks(): void {
     `;
   }).join("");
 
-  // bind add-tag selects
   tasks.forEach(t => {
     const sel = document.getElementById(`add-tag-${t.id}`) as HTMLSelectElement;
     if (sel) {
